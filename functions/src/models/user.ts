@@ -9,7 +9,7 @@ export default class User {
 
   constructor(document?: FirebaseFirestore.QueryDocumentSnapshot | FirebaseFirestore.DocumentSnapshot, id?: string) {
     if (typeof document !== "undefined") {
-      let data = document.data() || {};
+      const data = document.data() || {};
 
       this.id = document.id;
       this.createdAt = (typeof document.createTime !== "undefined" ? document.createTime.toDate() : null);

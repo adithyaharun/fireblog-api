@@ -2,22 +2,22 @@ class Post {
   id?: string;
   title?: string;
   slug?: string;
-  author?: String;
+  author?: string;
   content?: string;
   excerpt?: string;
   status?: string;
+  thumbnail?: string;
   categories?: any[];
-  createdAt?: Date | null;
-  updatedAt?: Date | null;
+  createdAt?: Date;
+  updatedAt?: Date;
 
   constructor(document?: FirebaseFirestore.QueryDocumentSnapshot | FirebaseFirestore.DocumentSnapshot, id?: string) {
     if (typeof document !== "undefined") {
-      let data = document.data() || {};
+      const data = document.data() || {};
+
+      console.log(data.createdAt);
 
       this.id = document.id;
-      this.createdAt = (typeof document.createTime !== "undefined" ? document.createTime.toDate() : null);
-      this.updatedAt = (typeof document.updateTime !== "undefined" ? document.updateTime.toDate() : null);
-
       this.title = data.title;
       this.slug = data.slug;
       this.author = data.author;
@@ -25,7 +25,9 @@ class Post {
       this.excerpt = data.excerpt;
       this.status = data.status;
       this.categories = data.categories;
-      this.status = data.status;
+      this.thumbnail = data.thumbnail;
+      this.createdAt = data.createdAt.toDate();
+      this.updatedAt = data.updatedAt.toDate();
     }
   }
 }

@@ -1,7 +1,7 @@
 import * as express from "express";
 import * as admin from "firebase-admin";
 
-import Post from "../models/post";
+import Post from "../../models/post";
 
 class PostController {
   public router = express.Router();
@@ -20,6 +20,9 @@ class PostController {
   public intializeRoutes() {
     this.router.get('/', this.index);
     this.router.get('/:id', this.show);
+    this.router.post('/', this.store);
+    this.router.put('/:id', this.update);
+    this.router.delete('/:id', this.destroy);
   }
 
   /**
@@ -30,7 +33,7 @@ class PostController {
     const page = parseInt(req.query.page || 1);
 
     try {
-      const posts: Post[] = [];
+      const posts: FirebaseFirestore.DocumentData[] = [];
       const postSnapshots = await this.db.collection("posts")
         .where("status", "==", "published")
         .orderBy("createdAt", "desc")
@@ -38,9 +41,8 @@ class PostController {
         .offset(limit * (page - 1))
         .get();
 
-      postSnapshots.forEach((document: FirebaseFirestore.DocumentSnapshot) => {
-        const post = new Post(document);
-        posts.push(post);
+      postSnapshots.forEach((document: FirebaseFirestore.QueryDocumentSnapshot) => {
+        posts.push(document.data());
       });
 
       res.json(posts);
@@ -73,6 +75,68 @@ class PostController {
       }
 
       res.json(new Post(snapshot.docs[0]));
+    } catch (error) {
+      res.status(500).json({
+        error: true,
+        message: error
+      });
+    }
+  }
+
+  /**
+   * Store new resource.
+   */
+  store = async (req: express.Request, res: express.Response) => {
+    try {
+      const post = await this.db.collection("posts").add(req.body);
+
+      res.status(201).json({
+        error: false,
+        message: "Post created.",
+        postId: post.id
+      });
+    } catch (error) {
+      res.status(500).json({
+        error: true,
+        message: error
+      });
+    }
+  }
+
+  /**
+   * Update a resource.
+   */
+  update = async (req: express.Request, res: express.Response) => {
+    try {
+      await this.db.collection("posts")
+        .doc(req.params.id)
+        .set(req.body, { merge: true });
+
+      res.json({
+        error: false,
+        message: "Post updated."
+      });
+    } catch (error) {
+      res.status(500).json({
+        error: true,
+        message: error
+      });
+    }
+  }
+
+  /**
+   * Delete a resource.
+   */
+  destroy = async (req: express.Request, res: express.Response) => {
+    try {
+      await this.db.collection("posts")
+        .doc(req.params.id)
+        .delete();
+
+      res.json({
+        error: false,
+        message: "Post deleted."
+      });
     } catch (error) {
       res.status(500).json({
         error: true,

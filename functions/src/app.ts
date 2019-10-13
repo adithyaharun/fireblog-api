@@ -29,7 +29,7 @@ class App {
 
     // "Route-not-found" handler.
     this.app.use(function (req, res) {
-      res.status(404).json({ error: true, message: "Route not found." });
+      res.status(404).json({ error: true, message: "Route not found.", req });
     });
   }
 }

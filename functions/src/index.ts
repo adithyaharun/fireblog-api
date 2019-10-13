@@ -14,4 +14,7 @@ admin.initializeApp({ credential: admin.credential.applicationDefault() });
 const postApi = new App([new PostController()]);
 
 // Return Express instance to Firebase Functions.
-exports.post = functions.https.onRequest(postApi.app);
+exports.post = functions
+    .region('asia-east2')
+    .https
+    .onRequest(postApi.app);
