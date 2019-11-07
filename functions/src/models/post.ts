@@ -26,8 +26,8 @@ class Post {
       this.status = data.status;
       this.categories = data.categories;
       this.thumbnail = data.thumbnail;
-      this.createdAt = data.createdAt.toDate();
-      this.updatedAt = data.updatedAt.toDate();
+      this.createdAt = data.createdAt ? data.createdAt.toDate() : null;
+      this.updatedAt = data.updatedAt ? data.updatedAt.toDate() : null;
     }
   }
 }
