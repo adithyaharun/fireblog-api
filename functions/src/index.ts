@@ -11,10 +11,10 @@ import PostController from "./controllers/PostController";
 admin.initializeApp({ credential: admin.credential.applicationDefault() });
 
 // Initialize Express.
-const postApi = new App([new PostController()]);
+const bootstrap = new App([new PostController()]);
 
 // Return Express instance to Firebase Functions.
-exports.post = functions
+exports.v1 = functions
     .region('asia-east2')
     .https
-    .onRequest(postApi.app);
+    .onRequest(bootstrap.app);
