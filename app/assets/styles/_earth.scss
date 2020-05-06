@@ -1,0 +1,17 @@
+#earth {
+  min-height: 100%;
+  height: auto !important; /* This line and the next line are not necessary unless you need IE6 support */
+  height: 100%;
+  padding: calc(5rem + 1px) 0 150px;
+  position: relative;
+}
+
+.continent {
+  margin: auto;
+  max-width: 960px;
+
+  @media screen and (max-width: $break-phones) {
+    width: 100%;
+    padding: 0 1rem;
+  }
+}
