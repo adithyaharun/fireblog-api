@@ -19,7 +19,7 @@
   "hosting": [
     {
       "target": "app",
-      "public": "app/public",
+      "public": "app/dist",
       "ignore": [
         "firebase.json",
         "**/.*",
@@ -34,7 +34,7 @@
     },
     {
       "target": "admin",
-      "public": "admin/public",
+      "public": "admin/dist",
       "ignore": [
         "firebase.json",
         "**/.*",

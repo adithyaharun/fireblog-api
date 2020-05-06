@@ -41,15 +41,6 @@ class PostController {
       postSnapshots.forEach((document: FirebaseFirestore.DocumentSnapshot) => {
         const post = new Post(document);
         posts.push(post);
-        posts.push(post);
-        posts.push(post);
-        posts.push(post);
-        posts.push(post);
-        posts.push(post);
-        posts.push(post);
-        posts.push(post);
-        posts.push(post);
-        posts.push(post);
       });
 
       res.json(posts);

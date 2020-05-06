@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "fireball-c9a02"
+  },
+  "targets": {
+    "fireball-c9a02": {
+      "hosting": {
+        "app": [
+          "adithyaharun"
+        ]
+      }
+    }
   }
 }
