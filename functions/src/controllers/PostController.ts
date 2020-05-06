@@ -18,8 +18,8 @@ class PostController {
    * Route initialization.
    */
   public intializeRoutes() {
-    this.router.get('/', this.index);
-    this.router.get('/:id', this.show);
+    this.router.get('/post', this.index);
+    this.router.get('/post/:id', this.show);
   }
 
   /**
@@ -40,6 +40,15 @@ class PostController {
 
       postSnapshots.forEach((document: FirebaseFirestore.DocumentSnapshot) => {
         const post = new Post(document);
+        posts.push(post);
+        posts.push(post);
+        posts.push(post);
+        posts.push(post);
+        posts.push(post);
+        posts.push(post);
+        posts.push(post);
+        posts.push(post);
+        posts.push(post);
         posts.push(post);
       });
 

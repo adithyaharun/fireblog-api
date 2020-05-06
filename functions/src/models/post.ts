@@ -15,7 +15,7 @@ class Post {
     if (typeof document !== "undefined") {
       const data = document.data() || {};
 
-      console.log(data.createdAt);
+      console.log(data);
 
       this.id = document.id;
       this.title = data.title;

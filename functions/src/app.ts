@@ -8,13 +8,13 @@ class App {
   constructor(controllers: Array<any>) {
     this.app = express();
 
-    this.initializeMiddlewares();
+    this.initializeMiddleware();
     this.initializeControllers(controllers);
 
     return this;
   }
 
-  private initializeMiddlewares() {
+  private initializeMiddleware() {
     // Initialize body-parser.
     this.app.use(bodyParser.json());
 
@@ -29,7 +29,7 @@ class App {
 
     // "Route-not-found" handler.
     this.app.use(function (req, res) {
-      res.status(404).json({ error: true, message: "Route not found.", req });
+      res.status(404).json({ error: true, message: "Route not found." });
     });
   }
 }
