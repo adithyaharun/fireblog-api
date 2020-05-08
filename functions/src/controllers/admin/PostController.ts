@@ -1,11 +1,14 @@
 import * as express from "express";
 import * as admin from "firebase-admin";
+import fileUpload from "../../middlewares/fileUpload";
+import * as uuid from "uuid";
 
 import Post from "../../models/post";
 
 class PostController {
   public router = express.Router();
   private db = admin.firestore();
+  private fs = admin.storage().bucket();
 
   /**
    * Controller initialization.
@@ -18,11 +21,12 @@ class PostController {
    * Route initialization.
    */
   public intializeRoutes() {
-    this.router.get('/', this.index);
-    this.router.get('/:id', this.show);
-    this.router.post('/', this.store);
-    this.router.put('/:id', this.update);
-    this.router.delete('/:id', this.destroy);
+    this.router.get('/post', this.index);
+    this.router.get('/post/:id', this.show);
+    this.router.post('/post', this.store);
+    this.router.put('/post/:id', this.update);
+    this.router.delete('/post/:id', this.destroy);
+    this.router.post('/upload', fileUpload, this.upload);
   }
 
   /**
@@ -33,23 +37,23 @@ class PostController {
     const page = parseInt(req.query.page || 1);
 
     try {
-      const posts: FirebaseFirestore.DocumentData[] = [];
+      const posts: Post[] = [];
       const postSnapshots = await this.db.collection("posts")
-        .where("status", "==", "published")
         .orderBy("createdAt", "desc")
         .limit(limit)
         .offset(limit * (page - 1))
         .get();
 
-      postSnapshots.forEach((document: FirebaseFirestore.QueryDocumentSnapshot) => {
-        posts.push(document.data());
+      postSnapshots.forEach((document: FirebaseFirestore.DocumentSnapshot) => {
+        const post = new Post(document);
+        posts.push(post);
       });
 
       res.json(posts);
     } catch (error) {
       res.status(500).json({
         error: true,
-        message: error
+        message: error.message
       });
     }
   }
@@ -59,13 +63,11 @@ class PostController {
    */
   show = async (req: express.Request, res: express.Response) => {
     try {
-      const snapshot = await this.db.collection("posts")
-        .where('slug', '==', req.params.id)
-        .where('status', '==', 'published')
-        .limit(1)
+      const document = await this.db.collection("posts")
+        .doc(req.params.id)
         .get();
 
-      if (snapshot.empty) {
+      if (!document.exists) {
         res.status(404).json({
           error: true,
           message: "Post not found."
@@ -74,11 +76,11 @@ class PostController {
         return;
       }
 
-      res.json(new Post(snapshot.docs[0]));
+      res.json(new Post(document));
     } catch (error) {
       res.status(500).json({
         error: true,
-        message: error
+        message: error.message
       });
     }
   }
@@ -88,7 +90,12 @@ class PostController {
    */
   store = async (req: express.Request, res: express.Response) => {
     try {
-      const post = await this.db.collection("posts").add(req.body);
+      let { title, content, status, slug, thumbnail, featured, createdAt } = req.body;
+
+      const post = await this.db.collection("posts").add({
+        title, content, status, slug, thumbnail, featured,
+        createdAt: admin.firestore.Timestamp.fromDate(new Date(createdAt))
+      });
 
       res.status(201).json({
         error: false,
@@ -98,7 +105,7 @@ class PostController {
     } catch (error) {
       res.status(500).json({
         error: true,
-        message: error
+        message: error.message
       });
     }
   }
@@ -119,7 +126,7 @@ class PostController {
     } catch (error) {
       res.status(500).json({
         error: true,
-        message: error
+        message: error.message
       });
     }
   }
@@ -140,7 +147,33 @@ class PostController {
     } catch (error) {
       res.status(500).json({
         error: true,
-        message: error
+        message: error.message
+      });
+    }
+  }
+
+  /**
+   * Upload a file.
+   */
+  upload = async (req: any, res: any) => {
+    try {
+      let file = req.files[0];
+      let extension = file.originalname.split('.').pop();
+      let filename = `media/${uuid.v4()}.${extension}`;
+      let ref = this.fs.file(filename);
+
+      await ref.save(file.buffer);
+      await ref.makePublic();
+
+      res.json({
+        error: false,
+        message: "File uploaded.",
+        file: `https://firebasestorage.googleapis.com/v0/b/${this.fs.name}/o/${encodeURIComponent(filename)}?alt=media`
+      });
+    } catch (error) {
+      res.status(500).json({
+        error: true,
+        message: error.message
       });
     }
   }

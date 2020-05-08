@@ -1,5 +1,4 @@
 import * as express from "express";
-import * as bodyParser from "body-parser";
 import * as cors from "cors";
 
 class App {
@@ -16,7 +15,7 @@ class App {
 
   private initializeMiddleware() {
     // Initialize body-parser.
-    this.app.use(bodyParser.json());
+    this.app.use(express.json());
 
     // Initialize CORS middleware.
     this.app.use(cors({ origin: true }));
