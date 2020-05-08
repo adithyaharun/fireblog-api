@@ -1,11 +1,11 @@
 
 export default {
-  mode: 'universal',
+  mode: 'spa',
   /*
   ** Headers of the page
   */
   head: {
-    title: process.env.npm_package_name || '',
+    titleTemplate: (title) => title ? `${title} | FireBlog` : 'FireBlog',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -24,6 +24,7 @@ export default {
   */
   css: [
     "@fortawesome/fontawesome-svg-core/styles.css",
+    "node_modules/easymde/dist/easymde.min.css"
   ],
   /*
   ** Plugins to load before mounting the App
@@ -44,13 +45,13 @@ export default {
     'bootstrap-vue/nuxt',
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/pwa',
   ],
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
+    baseURL: process.env.NODE_ENV === 'production' ? 'https://asia-east2-fireball-c9a02.cloudfunctions.net/admin' : 'http://localhost:5000/fireball-c9a02/asia-east2/admin'
   },
   /*
   ** Build configuration
