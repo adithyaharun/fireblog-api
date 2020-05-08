@@ -90,8 +90,7 @@ class PostController {
    */
   store = async (req: express.Request, res: express.Response) => {
     try {
-      let { title, content, status, slug, thumbnail, featured, createdAt } = req.body;
-
+      const { title, content, status, slug, thumbnail, featured, createdAt } = req.body;
       const post = await this.db.collection("posts").add({
         title, content, status, slug, thumbnail, featured,
         createdAt: admin.firestore.Timestamp.fromDate(new Date(createdAt))
@@ -157,10 +156,10 @@ class PostController {
    */
   upload = async (req: any, res: any) => {
     try {
-      let file = req.files[0];
-      let extension = file.originalname.split('.').pop();
-      let filename = `media/${uuid.v4()}.${extension}`;
-      let ref = this.fs.file(filename);
+      const file = req.files[0];
+      const extension = file.originalname.split('.').pop();
+      const filename = `media/${uuid.v4()}.${extension}`;
+      const ref = this.fs.file(filename);
 
       await ref.save(file.buffer);
       await ref.makePublic();

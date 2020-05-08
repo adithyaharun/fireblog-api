@@ -39,7 +39,8 @@ export default function (req: any, res: any, next: any) {
           const size = Buffer.byteLength(buffer);
           console.log(`${filename} is ${size} bytes`);
           if (err) {
-            return reject(err);
+            reject(err);
+            return;
           }
 
           files.push({
@@ -54,7 +55,8 @@ export default function (req: any, res: any, next: any) {
           try {
             fs.unlinkSync(filepath);
           } catch (error) {
-            return reject(error);
+            reject(error);
+            return;
           }
 
           resolve();
