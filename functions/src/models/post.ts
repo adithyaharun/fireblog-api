@@ -7,6 +7,7 @@ class Post {
   excerpt?: string;
   status?: string;
   thumbnail?: string;
+  featured?: string;
   categories?: any[];
   createdAt?: Date;
   updatedAt?: Date;
@@ -24,6 +25,7 @@ class Post {
       this.status = data.status;
       this.categories = data.categories;
       this.thumbnail = data.thumbnail;
+      this.featured = data.featured;
       this.createdAt = data.createdAt ? data.createdAt.toDate() : null;
       this.updatedAt = data.updatedAt ? data.updatedAt.toDate() : null;
     }
