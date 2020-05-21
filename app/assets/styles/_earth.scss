@@ -10,6 +10,17 @@
   margin: auto;
   max-width: 960px;
 
+  a {
+    color: #f57f17;
+    text-decoration: none;
+
+    &:hover,
+    &:active {
+      color: #f9a825;
+      text-decoration: underline;
+    }
+  }
+
   @media screen and (max-width: $break-phones) {
     width: 100%;
     padding: 0 1rem;

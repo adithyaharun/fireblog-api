@@ -6,8 +6,8 @@
         <h1 class="post-title">{{ data.title }}</h1>
         <small class="post-date">Published at {{ date(data.createdAt) }}</small>
       </div>
-      <div class="post-thumbnail" v-if="data.thumbnail">
-        <img :src="data.thumbnail" width="100%" />
+      <div class="post-thumbnail" v-if="data.featured">
+        <img :src="data.featured" width="100%" />
       </div>
       <div class="post-content" v-html="parsedContents"></div>
     </div>
@@ -81,7 +81,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .post-meta {
   padding: 3rem 0;
   text-align: center;
@@ -113,38 +113,46 @@ export default {
 .post-detail {
   margin-bottom: 3rem;
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    margin-top: 2.5rem;
-    position: relative;
-
-    &:hover > a {
-      display: block;
-    }
-
-    a {
-      display: none;
-      position: absolute;
-      top: 0;
-      text-align: right;
-      left: -36px;
-      width: 36px;
-      color: #e0e0e0;
-      text-decoration: none;
-      content: "#";
-
-      @media screen and (prefers-color-scheme: dark) {
-        color: #505050;
-      }
-    }
-  }
-
   .post-content {
     color: #000000;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin-top: 2.5rem;
+      position: relative;
+
+      &:hover > a {
+        display: block;
+      }
+
+      a {
+        display: none;
+        position: absolute;
+        top: 0;
+        text-align: right;
+        left: -36px;
+        width: 36px;
+        color: rgba(#000, 0.25);
+        text-decoration: none;
+        content: "#";
+
+        &:hover {
+          color: rgba(#000, 0.75);
+
+          @media screen and (prefers-color-scheme: dark) {
+            color: rgba(#fff, 0.75);
+          }
+        }
+
+        @media screen and (prefers-color-scheme: dark) {
+          color: rgba(#fff, 0.25);
+        }
+      }
+    }
 
     @media screen and (prefers-color-scheme: dark) {
       color: #ffffff;

@@ -1,23 +1,22 @@
 <template>
-  <article class="post">
-    <nuxt-link
-      :to="{
+  <nuxt-link
+    :to="{
         name: 'post-id',
         params: { id: data.slug, post: data }
       }"
-    >
-      <section class="post-image">
-        <img :src="data.thumbnail" width="100%" />
+    class="post"
+  >
+    <section class="post-image">
+      <img :src="data.thumbnail" />
+    </section>
+    <section class="post-content">
+      <section class="post-header">
+        <h2 class="post-title">{{ data.title }}</h2>
+        <span class="post-date">Published at{{ prettifyDate(data.createdAt) }}</span>
       </section>
-      <section class="post-content">
-        <section class="post-header">
-          <h2 class="post-title">{{ data.title }}</h2>
-          <span class="post-date">Published at{{ prettifyDate(data.createdAt) }}</span>
-        </section>
-        <section class="post-excerpt" v-html="parse(data.excerpt)"></section>
-      </section>
-    </nuxt-link>
-  </article>
+      <section class="post-excerpt" v-html="parse(data.excerpt)"></section>
+    </section>
+  </nuxt-link>
 </template>
 
 <script>
@@ -50,31 +49,34 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .post {
   padding: 3rem 0;
   border-top: 1px solid #efeef4;
   color: #000000;
+  display: flex;
 
-  a {
-    color: #000000;
-    text-decoration: none;
-    display: flex;
+  &:hover,
+  &:active {
+    text-decoration: none !important;
+  }
 
-    &:hover .post-title,
-    &:active .post-title {
-      text-decoration: underline;
-      color: #147efb;
-    }
+  &:hover .post-title,
+  &:active .post-title {
+    text-decoration: underline;
+    color: #f57f17;
+  }
 
-    @media screen and (max-width: 414px) {
-      display: block;
-    }
+  @media screen and (max-width: 414px) {
+    display: block;
   }
 
   .post-image {
-    width: 180px;
     margin-right: 2rem;
+
+    img {
+      width: 180px;
+    }
 
     @media screen and (max-width: 414px) {
       margin-right: 0;
