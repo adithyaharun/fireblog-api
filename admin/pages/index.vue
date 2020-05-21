@@ -19,16 +19,7 @@
       <b-col cols="12">
         <b-table striped hover :busy.sync="loading" :items="posts" :fields="fields">
           <template v-slot:cell(title)="data">
-            <nuxt-link
-              :to="{
-                name: 'post-form',
-                query: {
-                  id: data.item.id,
-                  state: 'edit'
-                },
-                params: { data: data.item }
-              }"
-            >{{ data.item.title }}</nuxt-link>
+            <a href="javascript:;" @click="viewPost(data.item)">{{ data.item.title }}</a>
           </template>
           <template v-slot:cell(status)="data">
             <b-badge :variant="formatStatus(data.item.status)">{{ data.item.status.toUpperCase() }}</b-badge>
@@ -75,6 +66,17 @@ export default {
   methods: {
     ...mapActions({ getPost: "post/get" }),
     openSearch() {},
+    viewPost(data) {
+      const cleanData = Object.assign({}, data);
+      this.$router.push({
+        name: "post-form",
+        query: {
+          id: cleanData.id,
+          state: "edit"
+        },
+        params: { data: cleanData }
+      });
+    },
     formatStatus(status) {
       switch (status) {
         case "published":
