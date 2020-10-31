@@ -37,7 +37,7 @@ export default {
 
   nav {
     margin: auto;
-    max-width: 960px;
+    max-width: 640px;
     line-height: 5rem;
     display: flex;
     align-items: stretch;

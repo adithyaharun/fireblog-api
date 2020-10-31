@@ -26,7 +26,7 @@ export default {
   border-top: 1px solid #f0f0f0;
   padding: 3rem 0;
   margin: auto;
-  width: 960px;
+  width: 640px;
   text-align: center;
   color: #b0b0b0;
   height: 150px;
